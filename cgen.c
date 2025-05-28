@@ -47,7 +47,7 @@ static int paramCounter(TreeNode * tree){
 
 /* Procedure genStmt generates code at a statement node */
 static void genStmt(TreeNode * tree){
-  int reg1, reg2, labelfalse, labelend, labelloop;
+  int labelfalse, labelend, labelloop;
   switch (tree->kind.stmt) {
       case ifK:
         cGen(tree->child[0], -1);
@@ -110,24 +110,24 @@ static void genStmt(TreeNode * tree){
 
       case assignK: {
         cGen(tree->child[1], -1);
-        reg2 = count;
-        if (tree->child[0]->kind.exp == vectorK) cGen(tree->child[0]->child[0], -1);
-        reg1 = count;
+        int reg_exp = count;        
         if (tree->child[0]->kind.exp == vectorK) {
-          fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg1);
+          cGen(tree->child[0]->child[0], -1);
+          int reg_index = count;
+          fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
           fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,
                   st_lookup(tree->child[0]->attr.name, tree->child[0]->attr.scope));
-          fprintf(outIntCodeFile, "(STORE, %s($t%d)", tree->child[0]->attr.name, count);
+          fprintf(outIntCodeFile, "(STORE, %s($t%d), ", tree->child[0]->attr.name, count);
         } else {
-          fprintf(outIntCodeFile, "(STORE, %s", tree->child[0]->attr.name);
+          fprintf(outIntCodeFile, "(STORE, %s, ", tree->child[0]->attr.name);
         }
 
         if (tree->child[1]->kind.exp == vectorK && tree->child[0]->kind.exp == vectorK)
-          fprintf(outIntCodeFile, ", $t%d, -)\n", reg2);
+          fprintf(outIntCodeFile, "$t%d, -)\n", reg_exp);
         else if (tree->child[1]->kind.exp == vectorK)
-          fprintf(outIntCodeFile, ", $t%d, -)\n", count);
+          fprintf(outIntCodeFile, "$t%d, -)\n", count);
         else
-          fprintf(outIntCodeFile, ", $t%d, -)\n", reg2);
+          fprintf(outIntCodeFile, "$t%d, -)\n", reg_exp);
         break;
       }
       default:
@@ -137,8 +137,7 @@ static void genStmt(TreeNode * tree){
 
 /* Procedure genExp generates code at an expression node */
 static void genExp(TreeNode * tree){
-  int reg1, reg2;
-  char rg1[10], rg2[10];
+  
   switch (tree->kind.exp) {
     case typeK:
       cGen(tree->child[0], -1);
@@ -150,24 +149,27 @@ static void genExp(TreeNode * tree){
       fprintf(outIntCodeFile, "(LOAD, $t%d, %s, -)\n", indexCounter(), tree->attr.name);
       break;
     case vectorK:
-      reg1 = count;
+      // processa o indice do vetor e armazena o numero do registrador em reg_index
       cGen(tree->child[0], -1);
-      reg2 = count;
-      fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg2);
-      fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,
-              st_lookup(tree->attr.name, tree->attr.scope));
+      int reg_index = count;
+      //obtem a posição da pilha de execução
+      fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
+      //soma o endereço com um offset da posição na tabela
+      fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,st_lookup(tree->attr.name, tree->attr.scope));
+      // carrega o valor do vetor na posição calculada
       fprintf(outIntCodeFile, "(LOAD, $t%d, %s($t%d), -)\n", indexCounter(), tree->attr.name, count);
       break;
     case operationK:
-      // processa o primeiro operador e armazena o numero do registrador em rg1
+      char rg1[10], rg2[10];
+      // processa o primeiro operando e armazena o numero do registrador em reg_op1
       cGen(tree->child[0], -1);
-      reg1 = count;
-      sprintf(rg1, "$t%d", reg1);
+      int reg_op1 = count;
+      sprintf(rg1, "$t%d", reg_op1);
 
-      //processa o segundo operador e armazena o numero do registrador em rg2
+      //processa o segundo operando e armazena o numero do registrador em reg_op2
       cGen(tree->child[1], -1);
-      reg2 = count;
-      sprintf(rg2, "$t%d", reg2);
+      int reg_op2 = count;
+      sprintf(rg2, "$t%d", reg_op2);
       //gera a quadrupla de acordo com o operador
       fprintf(outIntCodeFile, "(");
       printOp(tree->attr.op, "");

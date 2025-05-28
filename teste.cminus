@@ -3,5 +3,5 @@ void main (void){
     int a;
     int x[10];
 
-    a = x[1];
+    x[1] = x[2];
 }
