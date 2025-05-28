@@ -1,0 +1,7 @@
+void main (void){
+
+    int a;
+    int x[10];
+
+    a = x[1];
+}
