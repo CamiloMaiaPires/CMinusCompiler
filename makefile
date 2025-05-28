@@ -37,7 +37,7 @@ $(LEX_C): $(FLEX_FILE) $(BISON_H)
 
 # Execução do programa
 run: $(EXECUTABLE)
-	./$(EXECUTABLE) teste
+	./$(EXECUTABLE) in2
 
 # Limpeza
 clean:

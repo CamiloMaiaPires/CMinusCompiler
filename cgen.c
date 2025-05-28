@@ -47,27 +47,33 @@ static int paramCounter(TreeNode * tree){
 
 /* Procedure genStmt generates code at a statement node */
 static void genStmt(TreeNode * tree){
-  int labelfalse, labelend, labelloop;
+  int labelfalse, labelend;
   switch (tree->kind.stmt) {
       case ifK:
+        //processa o nó da condição
         cGen(tree->child[0], -1);
         labelfalse = label;
         labelend = label + 1;        
         label += 2;
+        //caso a condição seja falsa, pula para o bloco falso
         fprintf(outIntCodeFile, "(IFF, $t%d, L%d, -)\n", count, labelfalse);
+        //processa o nó do bloco verdadeiro
         cGen(tree->child[1], -1); 
         fprintf(outIntCodeFile, "(GOTO, L%d, -, -)\n", labelend);
         fprintf(outIntCodeFile, "(LAB, L%d, -, -)\n", labelfalse);
+        //processa o nó do bloco falso
         cGen(tree->child[2], -1); 
         fprintf(outIntCodeFile, "(LAB, L%d, -, -)\n", labelend);
         break;
       case whileK:
-        labelloop = label;
+        int labelloop = label;
         fprintf(outIntCodeFile, "(LAB, L%d, -, -)\n", labelloop);
+        //processa condição do while
         cGen(tree->child[0], -1);
         labelend = label + 1;        
         label += 2;
         fprintf(outIntCodeFile, "(WHILE, $t%d, L%d, -)\n", count, labelend);
+        //processa bloco do while
         cGen(tree->child[1], -1); 
         fprintf(outIntCodeFile, "(GOTO, L%d, -, -)\n", labelloop);
         fprintf(outIntCodeFile, "(LAB, L%d, -, -)\n", labelend);
@@ -97,6 +103,7 @@ static void genStmt(TreeNode * tree){
       }
     
       case callK:
+        //processa os PARAM 
         cGen(tree->child[0], callK);
         fprintf(outIntCodeFile, "(CALL, $t28, %s, %d)\n", tree->attr.name, paramCounter(tree));
         break;
@@ -109,25 +116,21 @@ static void genStmt(TreeNode * tree){
         break;
 
       case assignK: {
+        // processa o nó do lado direito da atribuição
         cGen(tree->child[1], -1);
         int reg_exp = count;        
         if (tree->child[0]->kind.exp == vectorK) {
+          // caso seja vetor, calcula o endereço antes de fazer o STORE
           cGen(tree->child[0]->child[0], -1);
           int reg_index = count;
           fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
           fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,
                   st_lookup(tree->child[0]->attr.name, tree->child[0]->attr.scope));
-          fprintf(outIntCodeFile, "(STORE, %s($t%d), ", tree->child[0]->attr.name, count);
+          fprintf(outIntCodeFile, "(STORE, %s($t%d), $t%d, -)\n", tree->child[0]->attr.name, count, reg_exp);
         } else {
-          fprintf(outIntCodeFile, "(STORE, %s, ", tree->child[0]->attr.name);
+          fprintf(outIntCodeFile, "(STORE, %s, $t%d, -)\n", tree->child[0]->attr.name, reg_exp);
         }
 
-        if (tree->child[1]->kind.exp == vectorK && tree->child[0]->kind.exp == vectorK)
-          fprintf(outIntCodeFile, "$t%d, -)\n", reg_exp);
-        else if (tree->child[1]->kind.exp == vectorK)
-          fprintf(outIntCodeFile, "$t%d, -)\n", count);
-        else
-          fprintf(outIntCodeFile, "$t%d, -)\n", reg_exp);
         break;
       }
       default:

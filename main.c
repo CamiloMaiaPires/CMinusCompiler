@@ -88,8 +88,6 @@ int main(int argc, char **argv){
         }
         codeGen(arvoreSintatica);
         fclose(outIntCodeFile);
-    }else{
-        printf("aaaaaa");
     }
 #endif
 #endif
