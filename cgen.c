@@ -163,20 +163,17 @@ static void genExp(TreeNode * tree){
       fprintf(outIntCodeFile, "(LOAD, $t%d, %s($t%d), -)\n", indexCounter(), tree->attr.name, count);
       break;
     case operationK:
-      char rg1[10], rg2[10];
       // processa o primeiro operando e armazena o numero do registrador em reg_op1
       cGen(tree->child[0], -1);
       int reg_op1 = count;
-      sprintf(rg1, "$t%d", reg_op1);
 
       //processa o segundo operando e armazena o numero do registrador em reg_op2
       cGen(tree->child[1], -1);
       int reg_op2 = count;
-      sprintf(rg2, "$t%d", reg_op2);
       //gera a quadrupla de acordo com o operador
       fprintf(outIntCodeFile, "(");
       printOp(tree->attr.op, "");
-      fprintf(outIntCodeFile, ", $t%d, %s, %s)\n", indexCounter(), rg1, rg2);
+      fprintf(outIntCodeFile, ", $t%d, $t%d, $t%d)\n", indexCounter(), reg_op1, reg_op2);
       break;
     default:
       break;
