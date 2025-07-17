@@ -30,18 +30,16 @@ def convert_instruction_to_binary(instruction):
         'halt':  '111111'
     }
     funct_table = {
-        'div':  '100000',
-        'mult':  '000001',
-        'sub':  '000010',
-        'add':  '000011',
-        'or':  '000100',
-        'and':  '000101',
-        'lt':  '000110',
-        'let':  '000111',
-        'gt':  '001000',
-        'get':  '001001',
-        'comp':  '001010',
-        'neq':  '001011'
+        'add':  '100000',
+        'sub':  '100010',
+        'mult': '011000',
+        'div':  '011010',
+        'and':  '100100',
+        'or':   '100101',
+        'nor':  '100111',
+        'xor':  '100110',
+        'gt':   '010000'
+
     }
     instr_parts = instruction.split()
     instr_type = instr_parts[0]
@@ -67,10 +65,15 @@ def convert_instruction_to_binary(instruction):
         opcode = opcode_table[instr_type]
         address = "0"*26
         binary_instr = f'{opcode}{address}'
-    elif instr_type in ['input', 'output']:
+    elif instr_type in ['input']:
         opcode = opcode_table[instr_type]
         rs = toBinary(instr_parts[1])
-        immediate = format(0, '021b')
+        immediate = format(2**16 - 1, '016b')
+        binary_instr = f'{opcode}{'00000'}{rs}{immediate}'
+    elif instr_type in ['output']:
+        opcode = opcode_table[instr_type]
+        rs = toBinary(instr_parts[1])
+        immediate = format(2**21 - 1, '021b')
         binary_instr = f'{opcode}{rs}{immediate}'
     else:
         opcode = opcode_table[instr_type]
