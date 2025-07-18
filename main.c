@@ -9,8 +9,8 @@
 // int TraceAnalyze = TRUE;
 
 int TraceScan = FALSE;
-int TraceParse = TRUE;
-int TraceAnalyze = FALSE;
+int TraceParse = FALSE;
+int TraceAnalyze = TRUE;
 
 int Error = FALSE;
 
@@ -65,6 +65,7 @@ int main(int argc, char **argv){
             printf("\nCriando tabela de símbolos...\n");
         printf("\n");
         buildSymtab(arvoreSintatica);
+        saveSymTabCSV(pgm);
         if (TraceAnalyze)
             printf("\nInício da verificação de tipos...\n");
         typeCheck(arvoreSintatica);

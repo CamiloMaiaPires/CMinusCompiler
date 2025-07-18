@@ -25,5 +25,6 @@ void printSymTab();
 
 char* findFunType (char* name, char* scope);
 
+void saveSymTabCSV(const char *filename);
 
 #endif

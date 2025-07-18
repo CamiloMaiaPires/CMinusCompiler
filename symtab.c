@@ -123,3 +123,50 @@ void printSymTab(){
     }
   }
 }
+void saveSymTabCSV(char *pgm) {
+  char filename[256];  // Buffer para o nome final
+
+  const char *dot = strchr(pgm, '.');
+  if (dot != NULL) {
+    size_t prefixLen = dot - pgm;
+    strncpy(filename, pgm, prefixLen);
+    filename[prefixLen] = '\0';
+  } else {
+    strcpy(filename, pgm);
+  }
+  strcat(filename, ".csv");
+
+  FILE *fp = fopen(filename, "w");
+  if (!fp) {
+      fprintf(stderr, "Erro ao abrir %s para escrita da symtab\n", pgm);
+      return;
+  }
+
+  fprintf(fp, "Name,Location,TypeId,TypeData,Scope,LineNumbers\n");
+
+  for (int i = 0; i < SIZE; ++i) {
+      if (hashTable[i] != NULL) {
+          BucketList l = hashTable[i];
+          while (l != NULL) {
+              fprintf(fp, "%s,%d,%s,%s,%s,", 
+                      l->name,
+                      l->memloc,
+                      l->typeId,
+                      l->typeData,
+                      l->scope);
+
+              LineList t = l->lines;
+              while (t != NULL) {
+                  fprintf(fp, "%d", t->lineno);
+                  if (t->next != NULL) fprintf(fp, " ");
+                  t = t->next;
+              }
+              fprintf(fp, "\n");
+
+              l = l->next;
+          }
+      }
+  }
+
+  fclose(fp);
+}

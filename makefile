@@ -38,7 +38,6 @@ $(LEX_C): $(FLEX_FILE) $(BISON_H)
 # Execução do programa
 run: $(EXECUTABLE)
 	./$(EXECUTABLE) in
-
 # Limpeza
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) $(LEX_C) $(BISON_C) $(BISON_H)

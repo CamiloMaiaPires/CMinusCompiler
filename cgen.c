@@ -106,6 +106,9 @@ static void genStmt(TreeNode * tree){
         //processa os PARAM 
         cGen(tree->child[0], callK);
         fprintf(outIntCodeFile, "(CALL, $t28, %s, %d)\n", tree->attr.name, paramCounter(tree));
+        if(strcmp("output",tree->attr.name)){
+          fprintf(outIntCodeFile, "(SUM, $t%d, $t0, $t28)\n", indexCounter());
+        }
         break;
 
       case variableK:
@@ -123,14 +126,13 @@ static void genStmt(TreeNode * tree){
           // caso seja vetor, calcula o endereço antes de fazer o STORE
           cGen(tree->child[0]->child[0], -1);
           int reg_index = count;
-          fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
+          fprintf(outIntCodeFile, "(SUM, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
           fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,
                   st_lookup(tree->child[0]->attr.name, tree->child[0]->attr.scope));
           fprintf(outIntCodeFile, "(STORE, %s($t%d), $t%d, -)\n", tree->child[0]->attr.name, count, reg_exp);
         } else {
           fprintf(outIntCodeFile, "(STORE, %s, $t%d, -)\n", tree->child[0]->attr.name, reg_exp);
         }
-
         break;
       }
       default:
@@ -156,7 +158,7 @@ static void genExp(TreeNode * tree){
       cGen(tree->child[0], -1);
       int reg_index = count;
       //obtem a posição da pilha de execução
-      fprintf(outIntCodeFile, "(ADD, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
+      fprintf(outIntCodeFile, "(SUM, $t%d, $t%d, $tSP)\n", indexCounter(), reg_index);
       //soma o endereço com um offset da posição na tabela
       fprintf(outIntCodeFile, "(ADDI, $t%d, $t%d, %d)\n", indexCounter(), count,st_lookup(tree->attr.name, tree->attr.scope));
       // carrega o valor do vetor na posição calculada
