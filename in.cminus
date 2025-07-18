@@ -1,10 +1,17 @@
+int a(int x, int y){
+    int soma;
+    soma = x + y;
+    output(soma);
+    soma = input();
+    return(soma);
+}
+
+
 void main(void)
 {
-   int x; int y;
-   x = input(); 
-   y = input();
-   if (x>y)
-       output(x);
-   else
-        output(y);
+    int x; int y;
+    x = input(); 
+    y = input();
+    x = a(x,y);
+    output(x);
 }

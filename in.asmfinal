@@ -1,21 +1,53 @@
-j 1
+j 20
+addi $t30 $t30 1
+sw $t31 $t29 1
+addi $t30 $t30 1
+addi $t30 $t30 1
+addi $t30 $t30 1
+lw $t1 $t29 1
+lw $t2 $t29 2
+add $t3 $t1 $t2
+sw $t3 $t29 3
+lw $t4 $t29 3
+output $t4
+input $t28
+add $t5 $t0 $t28
+sw $t5 $t29 3
+lw $t6 $t29 3
+addi $t28 $t6 0
+j 18
+lw $t31 $t29 1
+jr $t31
 addi $t30 $t30 32
 addi $t29 $t30 0
 addi $t30 $t30 1
 addi $t30 $t30 1
 input $t28
-add $t1 $t0 $t28
-sw $t1 $t29 1
+add $t7 $t0 $t28
+sw $t7 $t29 7
 input $t28
-add $t2 $t0 $t28
-sw $t2 $t29 2
-lw $t3 $t29 1
-lw $t4 $t29 2
-gt $t5 $t3 $t4
-beq $t5 $t0 3
-lw $t6 $t29 1
-output $t6
-j 20
-lw $t7 $t29 2
-output $t7
+add $t8 $t0 $t28
+sw $t8 $t29 8
+lw $t9 $t29 7
+lw $t10 $t29 8
+sw $t9 $t30 0
+addi $t30 $t30 1
+sw $t10 $t30 0
+addi $t30 $t30 1
+sw $t29 $t30 0
+addi $t29 $t30 0
+addi $t30 $t30 1
+sw $t9 $t29 2
+sw $t10 $t29 3
+jal 1
+addi $t30 $t29 0
+lw $t29 $t29 0
+subi $t30 $t30 1
+lw $t9 $t30 0
+subi $t30 $t30 1
+lw $t10 $t30 0
+add $t11 $t0 $t28
+sw $t11 $t29 7
+lw $t12 $t29 7
+output $t12
 halt
