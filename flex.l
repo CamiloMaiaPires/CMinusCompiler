@@ -8,7 +8,7 @@ char tokenString[MAXTOKENLEN+1];
 
 letra [a-zA-Z]
 digito [0-9]
-espaco [ \t]+
+espaco [ \t\r]+
 
 /*regras*/
 %%
@@ -37,8 +37,7 @@ espaco [ \t]+
 "]"             {return CSB;}
 "{"             {return OCB;}
 "}"             {return CCB;}
-\n              {line_number++;
-                }
+\n              {line_number++;}
 "/*"            { 
                 while (1) {
                     char c = input();

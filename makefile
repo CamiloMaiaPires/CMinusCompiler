@@ -17,7 +17,7 @@ C_SOURCES = analyze.c globals.c cgen.c main.c symtab.c $(BISON_C) $(LEX_C)
 OBJECTS = $(C_SOURCES:.c=.o)
 
 # Alvo padrão
-all: $(EXECUTABLE)
+all: $(EXECUTABLE) gen
 
 # Geração do executável
 $(EXECUTABLE): $(OBJECTS)
@@ -37,7 +37,10 @@ $(LEX_C): $(FLEX_FILE) $(BISON_H)
 
 # Execução do programa
 run: $(EXECUTABLE)
-	./$(EXECUTABLE) in
+	./$(EXECUTABLE) SO
+	python3 gen_asm.py
+	python3 gen_bin.py
+
 # Limpeza
 clean:
 	rm -f $(OBJECTS) $(EXECUTABLE) $(LEX_C) $(BISON_C) $(BISON_H)

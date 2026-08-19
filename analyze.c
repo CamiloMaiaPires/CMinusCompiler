@@ -84,9 +84,9 @@ static void insertNode(TreeNode *t)
       switch (t->kind.exp){
       case idK:
         //caso o id nao esteja
-        if (st_lookup(t->attr.name, t->attr.scope) == -1 && st_lookup(t->attr.name, "global") == -1){
-          printf("ERRO SEMÂNTICO: %s LINHA %d: MENSAGEM: %s\n", t->attr.name, t->lineno, "Expressão não declarada.");
-	        Error = TRUE;
+        if (st_lookup(t->attr.name, t->attr.scope) == -1 && st_lookup(t->attr.name, "global") == -1 && strcmp(t->attr.name, "KERNELpidbuffer") != 0&& strcmp(t->attr.name, "KERNELpreempt") != 0){
+            printf("ERRO SEMÂNTICO: %s LINHA %d: MENSAGEM: %s\n", t->attr.name, t->lineno, "Expressão não declarada.");
+            Error = TRUE;
         }else{
           st_insert(t->attr.name, t->lineno, 0, t->attr.scope, "variable", "integer", t->attr.len);
         }

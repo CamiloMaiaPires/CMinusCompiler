@@ -1,0 +1,44 @@
+Name,Location,TypeId,TypeData,Scope,LineNumbers
+pid,7,variable,integer,insertProcesses,21 23 24 25 26 27
+isEnabled,23,call,-,exec,54
+baseInstAddr,3,variable,integer,loadProgram,3 8 13 15 15
+en,13,variable,integer,exec,34 54 55
+main,39,function,void,global,110
+finished,30,variable,integer,execProcesses,70 83 84
+KERNELpreempt,0,variable,integer,main,119 123
+ClearContext,24,call,-,exec,56
+RestoreContext,16,call,-,exec,41 52
+input,9,call,-,insertProcesses,25
+selecao,40,variable,integer,main,113 114 118 122
+exec,11,function,integer,global,33
+SetLCD,17,call,-,exec,43 60
+a,35,variable,integer,menu,100
+SetLCD,37,call,-,menu,103
+baseHdAddr,2,variable,integer,loadProgram,2 6 10 12 13 14 14
+input,18,call,-,exec,44 61
+endHdAddr,4,variable,integer,loadProgram,4 10 12
+input,38,call,-,menu,104
+SaveContext,15,call,-,exec,40 51
+KERNELpidbuffer,0,variable,integer,exec,36 38 41 43 51 54 56
+execProcesses,43,call,-,main,120 124
+exec,33,call,-,execProcesses,83
+loadProgram,0,function,void,global,1
+insertProcesses,6,function,void,global,19
+LoadInstruction,5,call,-,loadProgram,13
+Run,20,call,-,exec,48
+executed,28,variable,integer,execProcesses,68 73 76 79 85 85 88 88
+KERNELpreempt,0,variable,integer,exec,45
+en,31,variable,integer,execProcesses,71 81 82
+insertProcesses,42,call,-,main,116
+pid,1,variable,integer,loadProgram,1 6
+selecao,36,variable,integer,menu,102 104 106
+SetQuantum,19,call,-,exec,46
+execProcesses,27,function,void,global,66
+EnableProcess,10,call,-,insertProcesses,27
+loadProgram,14,call,-,exec,38
+isEnabled,32,call,-,execProcesses,81
+pid,29,variable,integer,execProcesses,69 74 78 81 83 90 90 92 93
+menu,41,call,-,main,114
+menu,34,function,integer,global,100
+SetLCD,8,call,-,insertProcesses,22
+pid,12,variable,integer,exec,33 36

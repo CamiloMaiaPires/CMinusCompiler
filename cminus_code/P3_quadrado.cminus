@@ -1,0 +1,10 @@
+/* programa que calcula o quadrado de n*/
+
+void main(void) {
+    int n;
+    int quadrado;
+    n = input();
+    quadrado = n * n;
+    output(quadrado);
+    input();
+}

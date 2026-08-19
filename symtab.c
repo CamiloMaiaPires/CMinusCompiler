@@ -124,17 +124,7 @@ void printSymTab(){
   }
 }
 void saveSymTabCSV(char *pgm) {
-  char filename[256];  // Buffer para o nome final
-
-  const char *dot = strchr(pgm, '.');
-  if (dot != NULL) {
-    size_t prefixLen = dot - pgm;
-    strncpy(filename, pgm, prefixLen);
-    filename[prefixLen] = '\0';
-  } else {
-    strcpy(filename, pgm);
-  }
-  strcat(filename, ".csv");
+  char filename[22] = "./out_files/symtab.csv";  // Buffer para o nome final
 
   FILE *fp = fopen(filename, "w");
   if (!fp) {

@@ -10,7 +10,7 @@
 
 int TraceScan = FALSE;
 int TraceParse = FALSE;
-int TraceAnalyze = TRUE;
+int TraceAnalyze = FALSE;
 
 int Error = FALSE;
 
@@ -38,6 +38,12 @@ int main(int argc, char **argv){
     if (strchr(pgm, '.') == NULL){
         strcat(pgm, ".cminus");
     }
+
+    char temp[256];
+    snprintf(temp, sizeof(temp), "%s%s", "./cminus_code/", pgm);
+    strcpy(pgm, temp);
+    printf("%s", pgm);
+
     inputFile = fopen(pgm, "r");
 
     if (inputFile == NULL)
@@ -76,17 +82,7 @@ int main(int argc, char **argv){
 #if !NO_CODE
     if (!Error)
     {
-        char *codefile;
-        int fnlen = strcspn(pgm, ".");
-        codefile = (char *)calloc(fnlen + 4, sizeof(char));
-        strncpy(codefile, pgm, fnlen);
-        strcat(codefile, ".tm");
-        outIntCodeFile = fopen(codefile, "w");
-        if (outIntCodeFile == NULL)
-        {
-            printf("Unable to open %s\n", codefile);
-            exit(1);
-        }
+        outIntCodeFile = fopen("./out_files/intermediary.tm", "w");
         codeGen(arvoreSintatica);
         fclose(outIntCodeFile);
     }

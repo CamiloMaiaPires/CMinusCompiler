@@ -1,0 +1,16 @@
+/* Codigo que encontra o menor de dois números */
+
+void main(void) {
+    int a;
+    int b;
+    a = input();
+    b = input();
+
+    if (a < b){
+        output(a);
+        input();
+    } else{
+        output(b);
+        input();
+    }
+}

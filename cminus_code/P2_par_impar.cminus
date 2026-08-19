@@ -1,0 +1,18 @@
+/* Codigo para definir se número é par*/
+
+void main(void) {
+    int n;
+    n = input();
+
+    while (2 <= n) {
+        n = n - 2;
+    }
+
+    if (n == 0){
+        output(1); 
+        input();
+    }  else{
+        output(0);
+        input();  
+    }
+}

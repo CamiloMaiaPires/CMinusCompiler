@@ -1,0 +1,128 @@
+void loadProgram(int pid){
+    int baseHdAddr;
+    int baseInstAddr;
+    int endHdAddr;
+    /* calculo do endereço base HD (cada processo tem 186 endereços no HD) */
+    baseHdAddr = 186 * pid;
+    /* endereço base Memória de Instruções (será sempre 1024) */
+    baseInstAddr = 1024;
+    
+    endHdAddr = baseHdAddr + 186;
+
+    while(baseHdAddr < endHdAddr){
+        LoadInstruction(baseHdAddr, baseInstAddr);
+        baseHdAddr = baseHdAddr + 1;    
+        baseInstAddr = baseInstAddr + 1;
+    }
+}
+
+void insertProcesses(void){
+
+    int pid;
+    SetLCD(13); /* Selecione o processo, 11 para sair */
+    pid = 0;
+    while(pid != 11){
+        pid = input();
+        if(pid < 11){
+            EnableProcess(pid);
+        }
+    }
+}
+
+/*executa um processo a partir do pid*/
+int exec(int pid){
+    int en;
+
+    KERNELpidbuffer = pid;
+
+    loadProgram(KERNELpidbuffer); /* Carregar programa do HD para memória de instruções */
+
+    SaveContext(0); /* Salvar contexto do SO (programa 0) */
+    RestoreContext(KERNELpidbuffer);
+
+    SetLCD(KERNELpidbuffer);
+    input();
+    if(KERNELpreempt == 1){
+        SetQuantum();
+    }
+    Run();
+
+
+    SaveContext(KERNELpidbuffer); /* Salvar contexto do SO (programa 0) */
+    RestoreContext(0);
+
+    en = isEnabled(KERNELpidbuffer);
+    if(en == 0){ /*significa que o processo chegou ao sua instrução final*/
+        ClearContext(KERNELpidbuffer);
+        return 1;
+    } else{
+        /*aviso de preempção*/
+        SetLCD(14);
+        input();
+        return 0;
+    }
+}
+
+void execProcesses(void){
+
+    int executed;
+    int pid;
+    int finished;
+    int en;
+
+    executed = 0;
+    pid = 1;
+
+    while(executed < 10){
+        
+        if (pid == 1){
+            executed = 0;
+        }
+        en = isEnabled(pid);
+        if(en == 1){
+            finished = exec(pid);
+            if (finished == 1){
+                executed = executed + 1;
+            }
+        } else {
+            executed = executed + 1;
+        }
+        pid = pid + 1;
+
+        if(pid > 10){
+            pid = 1;
+        }
+
+    }
+}
+
+
+int menu(int a){
+
+    int selecao;
+    SetLCD(11); /*Escolha: Preempção ou não*/
+    selecao = input();
+
+    return selecao;
+}
+
+
+void main(void){
+
+    while(1 == 1){
+        int selecao;
+        selecao = menu();
+
+        insertProcesses();
+
+        if(selecao == 0){
+            KERNELpreempt = 0;
+            execProcesses();
+        }
+        if(selecao == 1){
+            KERNELpreempt = 1;
+            execProcesses();
+        }
+    }
+}
+

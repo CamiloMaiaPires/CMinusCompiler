@@ -1,0 +1,20 @@
+int a(int z, int b){
+    int soma;
+    soma = z + b;
+    output(soma);
+    soma = input();
+    return(soma);
+}
+
+
+void main(void)
+{
+    int x;
+    int y;
+    int c;
+    x = input();
+    y = input();
+    c = a(x,y);
+    output(c);
+    input();
+}

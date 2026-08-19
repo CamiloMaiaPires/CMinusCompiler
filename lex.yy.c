@@ -373,7 +373,7 @@ static const flex_int16_t yy_accept[57] =
 static const YY_CHAR yy_ec[256] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    2,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    2,    4,    1,    1,    1,    1,    1,    1,    5,
         6,    7,    8,    9,   10,    1,   11,   12,   12,   12,
@@ -888,12 +888,11 @@ case 26:
 /* rule 26 can match eol */
 YY_RULE_SETUP
 #line 40 "flex.l"
-{line_number++;
-                }
+{line_number++;}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 42 "flex.l"
+#line 41 "flex.l"
 { 
                 while (1) {
                     char c = input();
@@ -913,30 +912,30 @@ YY_RULE_SETUP
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 58 "flex.l"
+#line 57 "flex.l"
 {return ID;}
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 59 "flex.l"
+#line 58 "flex.l"
 {return NUM;}
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 60 "flex.l"
+#line 59 "flex.l"
 {}
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 61 "flex.l"
+#line 60 "flex.l"
 {return ERROR;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 63 "flex.l"
+#line 62 "flex.l"
 ECHO;
 	YY_BREAK
-#line 940 "lex.yy.c"
+#line 939 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1941,7 +1940,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 63 "flex.l"
+#line 62 "flex.l"
 
 
 TokenType getToken(void){

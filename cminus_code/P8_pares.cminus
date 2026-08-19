@@ -1,0 +1,26 @@
+/* programa para contar quantos pares de 1 a n */
+
+void main(void) {
+    int n;
+    int i;
+    int cont;
+    int temp;
+
+    n = input();
+    i = 1;
+    cont = 0;
+
+    while (i <= n) {
+        temp = i;
+        while (2 <= temp) {
+            temp = temp - 2;
+        }
+        if (temp == 0){
+            cont = cont + 1;
+        }
+        i = i + 1;
+    }
+
+    output(cont);
+    input();
+}
